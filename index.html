@@ -5,179 +5,209 @@
     <link rel="shortcut icon" href="images/icon.ico" />
     <style type="text/css">
       body {
-      	background-color: #f5f9ff;
+        background-color: #f5f9ff;
       }
 
       /* Hide both math displays initially, will display based on JS detection */
-       .mathjax-mobile, .mathml-non-mobile { display: none; }
+      .mathjax-mobile,
+      .mathml-non-mobile {
+        display: none;
+      }
 
-       /* Show the MathML content by default on non-mobile devices */
-       .show-mathml .mathml-non-mobile { display: block; }
-       .show-mathjax .mathjax-mobile { display: block; }
+      /* Show the MathML content by default on non-mobile devices */
+      .show-mathml .mathml-non-mobile {
+        display: block;
+      }
+      .show-mathjax .mathjax-mobile {
+        display: block;
+      }
 
       .content-margin-container {
-      	display: flex;
-      	width: 100%; /* Ensure the container is full width */
-      	justify-content: left; /* Horizontally centers the children in the container */
-      	align-items: center;  /* Vertically centers the children in the container */
+        display: flex;
+        width: 100%; /* Ensure the container is full width */
+        justify-content: left; /* Horizontally centers the children in the container */
+        align-items: center; /* Vertically centers the children in the container */
       }
       .main-content-block {
-      	width: 70%; /* Change this percentage as needed */
-         max-width: 1100px; /* Optional: Maximum width */
-      	background-color: #fff;
-      	border-left: 1px solid #DDD;
-      	border-right: 1px solid #DDD;
-      	padding: 8px 8px 8px 8px;
-      	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+        width: 70%; /* Change this percentage as needed */
+        max-width: 1100px; /* Optional: Maximum width */
+        background-color: #fff;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        padding: 8px 8px 8px 8px;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+          "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
       }
       .margin-left-block {
-      		font-size: 14px;
-      		width: 15%; /* Change this percentage as needed */
-      		max-width: 130px; /* Optional: Maximum width */
-      		position: relative;
-      		margin-left: 10px;
-      		text-align: left;
-      		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
-      		padding: 5px;
+        font-size: 14px;
+        width: 15%; /* Change this percentage as needed */
+        max-width: 130px; /* Optional: Maximum width */
+        position: relative;
+        margin-left: 10px;
+        text-align: left;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+          "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        padding: 5px;
       }
       .margin-right-block {
-      		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
-      		font-size: 14px;
-      		width: 25%; /* Change this percentage as needed */
-      		max-width: 256px; /* Optional: Maximum width */
-      		position: relative;
-      		text-align: left;
-      		padding: 10px;  /* Optional: Adds padding inside the caption */
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+          "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-size: 14px;
+        width: 25%; /* Change this percentage as needed */
+        max-width: 256px; /* Optional: Maximum width */
+        position: relative;
+        text-align: left;
+        padding: 10px; /* Optional: Adds padding inside the caption */
       }
 
       img {
-      		max-width: 100%; /* Make sure it fits inside the container */
-      		height: auto;
-      		display: block;
-      		margin: auto;
+        max-width: 100%; /* Make sure it fits inside the container */
+        height: auto;
+        display: block;
+        margin: auto;
       }
       .my-video {
-      		max-width: 100%; /* Make sure it fits inside the container */
-      		height: auto;
-      		display: block;
-      		margin: auto;
+        max-width: 100%; /* Make sure it fits inside the container */
+        height: auto;
+        display: block;
+        margin: auto;
       }
       /* Hide both video displays initially, will display based on JS detection */
-       .vid-mobile, .vid-non-mobile { display: none; }
+      .vid-mobile,
+      .vid-non-mobile {
+        display: none;
+      }
 
-       /* Show the video content by default on non-mobile devices */
-       .show-vid-mobile .vid-mobile { display: block; }
-       .show-vid-non-mobile .vid-non-mobile { display: block; }
+      /* Show the video content by default on non-mobile devices */
+      .show-vid-mobile .vid-mobile {
+        display: block;
+      }
+      .show-vid-non-mobile .vid-non-mobile {
+        display: block;
+      }
 
-      a:link,a:visited
-      {
-      	color: #0e7862; /*#1367a7;*/
-      	text-decoration: none;
+      a:link,
+      a:visited {
+        color: #0e7862; /*#1367a7;*/
+        text-decoration: none;
       }
       a:hover {
-      	color: #24b597; /*#208799;*/
+        color: #24b597; /*#208799;*/
       }
 
       h1 {
-      	font-size: 18px;
-      	margin-top: 4px;
-      	margin-bottom: 10px;
+        font-size: 18px;
+        margin-top: 4px;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        font-size: 16px;
+        margin-top: 4px;
+        margin-bottom: 8px;
       }
 
       table.header {
-         font-weight: 300;
-         font-size: 17px;
-         flex-grow: 1;
-      	width: 70%;
-         max-width: calc(100% - 290px); /* Adjust according to the width of .paper-code-tab */
+        font-weight: 300;
+        font-size: 17px;
+        flex-grow: 1;
+        width: 70%;
+        max-width: calc(
+          100% - 290px
+        ); /* Adjust according to the width of .paper-code-tab */
       }
-      table td, table td * {
-          vertical-align: middle;
-          position: relative;
+      table td,
+      table td * {
+        vertical-align: middle;
+        position: relative;
       }
       table.paper-code-tab {
-          flex-shrink: 0;
-          margin-left: 8px;
-          margin-top: 8px;
-          padding: 0px 0px 0px 8px;
-          width: 290px;
-          height: 150px;
+        flex-shrink: 0;
+        margin-left: 8px;
+        margin-top: 8px;
+        padding: 0px 0px 0px 8px;
+        width: 290px;
+        height: 150px;
       }
 
-      .layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
-      	box-shadow:
-      	        0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
-      	        5px 5px 0 0px #fff, /* The second layer */
-      	        5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
-      	        10px 10px 0 0px #fff, /* The third layer */
-      	        10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
-      	margin-top: 5px;
-      	margin-left: 10px;
-      	margin-right: 30px;
-      	margin-bottom: 5px;
+      .layered-paper {
+        /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+        box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.35),
+          /* The top layer shadow */ 5px 5px 0 0px #fff,
+          /* The second layer */ 5px 5px 1px 1px rgba(0, 0, 0, 0.35),
+          /* The second layer shadow */ 10px 10px 0 0px #fff,
+          /* The third layer */ 10px 10px 1px 1px rgba(0, 0, 0, 0.35); /* The third layer shadow */
+        margin-top: 5px;
+        margin-left: 10px;
+        margin-right: 30px;
+        margin-bottom: 5px;
       }
 
       hr {
-         height: 1px; /* Sets the height of the line to 1 pixel */
-         border: none; /* Removes the default border */
-         background-color: #DDD; /* Sets the line color to black */
-       }
+        height: 1px; /* Sets the height of the line to 1 pixel */
+        border: none; /* Removes the default border */
+        background-color: #ddd; /* Sets the line color to black */
+      }
 
       div.hypothesis {
-      	width: 80%;
-      	background-color: #EEE;
-      	border: 1px solid black;
-      	border-radius: 10px;
-      	-moz-border-radius: 10px;
-      	-webkit-border-radius: 10px;
-      	font-family: Courier;
-      	font-size: 18px;
-      	text-align: center;
-      	margin: auto;
-      	padding: 16px 16px 16px 16px;
+        width: 80%;
+        background-color: #eee;
+        border: 1px solid black;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        font-family: Courier;
+        font-size: 18px;
+        text-align: center;
+        margin: auto;
+        padding: 16px 16px 16px 16px;
       }
 
       div.citation {
-         font-size: 0.8em;
-         background-color:#fff;
-         padding: 10px;
-      	height: 200px;
-       }
+        font-size: 0.8em;
+        background-color: #fff;
+        padding: 10px;
+        height: 200px;
+      }
 
       .fade-in-inline {
-      	position: absolute;
-      	text-align: center;
-      	margin: auto;
-      	-webkit-mask-image: linear-gradient(to right,
-      																		transparent 0%,
-      																		transparent 40%,
-      																		black 50%,
-      																		black 90%,
-      																		transparent 100%);
-      	mask-image: linear-gradient(to right,
-      															transparent 0%,
-      															transparent 40%,
-      															black 50%,
-      															black 90%,
-      															transparent 100%);
-      	-webkit-mask-size: 8000% 100%;
-      	mask-size: 8000% 100%;
-      	animation-name: sweepMask;
-      	animation-duration: 4s;
-      	animation-iteration-count: infinite;
-      	animation-timing-function: linear;
-      	animation-delay: -1s;
+        position: absolute;
+        text-align: center;
+        margin: auto;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          transparent 40%,
+          black 50%,
+          black 90%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          transparent 40%,
+          black 50%,
+          black 90%,
+          transparent 100%
+        );
+        -webkit-mask-size: 8000% 100%;
+        mask-size: 8000% 100%;
+        animation-name: sweepMask;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-delay: -1s;
       }
 
       .fade-in2-inline {
-      		animation-delay: 1s;
+        animation-delay: 1s;
       }
 
       .inline-div {
-      		position: relative;
-          display: inline-block; /* Makes both the div and paragraph inline-block elements */
-          vertical-align: top; /* Aligns them at the top, you can adjust this to middle, bottom, etc., based on your needs */
-          width: 50px; /* Optional: Adds space between the div and the paragraph */
+        position: relative;
+        display: inline-block; /* Makes both the div and paragraph inline-block elements */
+        vertical-align: top; /* Aligns them at the top, you can adjust this to middle, bottom, etc., based on your needs */
+        width: 50px; /* Optional: Adds space between the div and the paragraph */
       }
     </style>
 
@@ -302,36 +332,60 @@
       <div class="margin-left-block"></div>
       <div class="main-content-block">
         <h1>Related Works</h1>
-        It is well known that Y does Y. And this has raised the question does X
-        do Y? Because if Y does Y then it stands to reason that X does Y. But we
-        cannot answer this until we realize the Z implies Y and X can be linked
-        to Z.<br /><br />
+        <h2>Video representation learning</h2>
+        Recent work in video understanding has shifted from convolution based
+        models toward transformer based architectures that process spacetime
+        information more directly. VideoMAE extends masked autoencoding to video
+        by removing a very high portion of spacetime patches during training and
+        asking the encoder to reconstruct the missing content. Let the video be
+        represented as a sequence of patch tokens x ∈ ℝ<sup>T × N × D</sup>. A
+        masking operator M selects a small visible subset, and the encoder E
+        processes only these tokens to produce a latent representation z =
+        E(M(x)). The decoder D then attempts to reconstruct the original patches
+        x̂ = D(z). This forces the encoder to learn stable spatial cues, global
+        structure, and temporal relationships rather than action specific
+        features. These properties make VideoMAE suitable for identifying
+        consistent spatial identity across scenes.<br /><br />
 
-        Now let's write some math!<br />
-        <center>
-          <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <mrow>
-              <mrow>
-                <mo>&#x2202;</mo>
-                <mi>y</mi>
-              </mrow>
-              <mo>/</mo>
-              <mrow>
-                <mo>&#x2202;</mo>
-                <mi>x</mi>
-              </mrow>
-            </mrow>
-            <mo>=</mo>
-            <mi>x</mi>
-          </math>
-        </center>
-        <br />
-        It's probably best to ask an LLM to help do the web formatting for math.
-        You can tell it "convert this latex equation into MathML:
-        $$\frac{\partial dy}{\partial dx} = x$$" But it took me a few tries. So,
-        if you get frustrated, you can embed an image of the equation, or use
-        other packages for rendering equations on webpages.
+        <h2>Vision language modeling</h2>
+        Language based models have become essential in video understanding,
+        since narrative cues can often clarify spatial or temporal context that
+        is not visually explicit. Qwen provides strong language representations
+        and can operate in vision language settings that support reasoning over
+        frames and subtitles. In this project, Qwen is used to convert subtitle
+        segments into dense text embeddings. A subtitle segment s is encoded as
+        t = L(s), where L is the language encoder. These embeddings provide
+        contextual signals about location, time, or narrative intent, which
+        stabilizes scene identity when visual content varies due to lighting or
+        framing.<br /><br />
+
+        <h2>Multimodal fusion for scene understanding</h2>
+        Combining visual and language information has become common in tasks
+        such as retrieval, grounding, and cross modal alignment. Multimodal
+        fusion allows models to integrate appearance features with narrative
+        cues that do not appear in the raw frames. In this project, the
+        normalized visual embedding v from VideoMAE and the subtitle embedding t
+        from Qwen are concatenated to form a joint representation f = [v, t].
+        This fused representation captures both spatial structure and narrative
+        meaning. Although multimodal fusion is well established in video
+        question answering and video search, it has not been widely applied to
+        identifying recurring architectural spaces across scenes.<br /><br />
+
+        <h2>Spatial documentation and architectural precedents</h2>
+        This project is also informed by concerns in architectural
+        documentation. Architectural historians often work with remote sites
+        that cannot be brought into controlled settings for study, and their
+        observations depend heavily on photographs and videos. Reflections in
+        texts such as <em>Capturing History Bit by Bit</em> describe the
+        challenge of recording spaces and the limits of media in conveying
+        spatial experience. While techniques such as photogrammetry, Gaussian
+        splats, and neural radiance fields provide new forms of spatial capture,
+        videos and images remain central tools. Our work extends this discussion
+        by exploring how learned representations can identify the same space
+        across many viewpoints and times, supporting spatial analysis of
+        recorded material.<br /><br />
       </div>
+
       <div class="margin-right-block" style="transform: translate(0%, -100%)">
         <!-- you can move the margin notes up and down with translate -->
         Interestingly, Plato also asked if X does Y, in
@@ -339,25 +393,23 @@
       </div>
     </div>
 
-    <div class="content-margin-container">
-      <div class="margin-left-block"></div>
-      <div class="main-content-block">
-        <h1>Another section</h1>
-        In this section we embed a video:
-        <video class="my-video" loop autoplay muted style="width: 725px">
-          <source src="./images/mtsh.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <div class="margin-right-block">
-        A caption for the video could go here.
-      </div>
-    </div>
-
     <div class="content-margin-container" id="proposal">
       <div class="margin-left-block"></div>
       <div class="main-content-block">
         <h1>Proposal</h1>
-        Describe your proposed solution or approach here.
+        Our project proposes a multimodal method for learning the spatial
+        identity of video scenes. We aim to recognize when different clips
+        depict the same physical environment even when viewpoint, lighting, or
+        time of day vary. To achieve this, we extract visual embeddings from a
+        VideoMAE encoder and combine them with subtitle based language
+        embeddings from Qwen. This fused representation captures both spatial
+        structure and narrative cues, allowing us to cluster clips by shared
+        location and track how a space appears across an entire film. By
+        comparing the visual and textual signals associated with each space, the
+        system can highlight potential continuity issues, such as inconsistent
+        lighting or temporal mismatch. Through this multimodal approach, we seek
+        to support spatial analysis and narrative interpretation of video
+        material.
       </div>
       <div class="margin-right-block"></div>
     </div>
@@ -407,8 +459,46 @@
     <div class="main-content-block">
       <h1>Implications and limitations</h1>
       Let's end with some discussion of the implications and limitations.
+
+      <h1>Template Section</h1>
+      Now let's write some math!<br />
+      <center>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mrow>
+            <mrow>
+              <mo>&#x2202;</mo>
+              <mi>y</mi>
+            </mrow>
+            <mo>/</mo>
+            <mrow>
+              <mo>&#x2202;</mo>
+              <mi>x</mi>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mi>x</mi>
+        </math>
+      </center>
+      <br />
+      It's probably best to ask an LLM to help do the web formatting for math.
+      You can tell it "convert this latex equation into MathML: $$\frac{\partial
+      dy}{\partial dx} = x$$" But it took me a few tries. So, if you get
+      frustrated, you can embed an image of the equation, or use other packages
+      for rendering equations on webpages.
     </div>
     <div class="margin-right-block"></div>
+  </div>
+
+  <div class="content-margin-container">
+    <div class="margin-left-block"></div>
+    <div class="main-content-block">
+      <h1>Another section</h1>
+      In this section we embed a video:
+      <video class="my-video" loop autoplay muted style="width: 725px">
+        <source src="./images/mtsh.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="margin-right-block">A caption for the video could go here.</div>
   </div>
 
   <div class="content-margin-container" id="citations">
@@ -428,4 +518,17 @@
       <!-- margin notes for reference block here -->
     </div>
   </div>
+
+  <p id="wordCount"></p>
 </html>
+
+<script>
+  function countWords(text) {
+    return text.trim().split(/\s+/).length;
+  }
+
+  const content = document.body.innerText;
+  const totalWords = countWords(content);
+
+  document.getElementById("wordCount").innerText = "Word count: " + totalWords;
+</script>
