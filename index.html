@@ -563,26 +563,40 @@
         narrative/world-level semantic similarity. Thus, the final
         representation is capable of supporting fine-grained scene segmentation
         and semantic distance reasoning within longer video sequences.<br /><br />
+      </div>
+      <div class="margin-right-block"></div>
+    </div>
 
+    <div class="content-margin-container">
+      <div class="margin-left-block"></div>
+      <div class="main-content-block">
         <img
           src="./images/semanticAndVideoMAEVisualDistanceOverTime.png"
           width="512px"
         />
+      </div>
+      <div class="margin-right-block">
         Figure: Scene distance of original VideoMAE model before training (The
         blue line shows the interpolated semantic distance, and the orange line
         shows visual distance. The red horizontal line is the semantic
         threshold. For LLM, semantic distance fluctuates strongly and often
         crosses the threshold, while for the original VideoMAE model, visual
-        distance stays near zero with only small bumps.)<br /><br />
+        distance stays near zero with only small bumps.)
+      </div>
+    </div>
 
+    <div class="content-margin-container">
+      <div class="margin-left-block"></div>
+      <div class="main-content-block">
         <img src="./images/SemanticSimilarityMatrix.png" width="512px" />
+      </div>
+      <div class="margin-right-block">
         Figure: Semantic similarity matrix (Almost all visual distances are
         extremely small, clustered below about 0.02. This indicates that
         VideoMAE sees the majority of clips as visually very similar. The
         spatial layout and low level appearance of the footage remain stable
         across most of the timeline.)
       </div>
-      <div class="margin-right-block"></div>
     </div>
 
     <div class="content-margin-container" id="results">
@@ -667,11 +681,26 @@
     <div class="margin-left-block"></div>
     <div class="main-content-block">
       <h1>Results and Discussion</h1>
+    </div>
+    <div class="margin-right-block"></div>
+  </div>
+
+  <div class="content-margin-container">
+    <div class="margin-left-block"></div>
+    <div class="main-content-block">
       <img src="./images/PCA.png" width="512px" />
-      <h2>PCA Analysis of scene embeddings</h2>
+    </div>
+    <div class="margin-right-block">
       Figure: PCA of scene embeddings before and after Qwen supervision on a
       short sample video with three locations: outside (blue), kitchen (green),
-      living room (red).<br /><br />
+      living room (red).
+    </div>
+  </div>
+
+  <div class="content-margin-container">
+    <div class="margin-left-block"></div>
+    <div class="main-content-block">
+      <h2>PCA Analysis of scene embeddings</h2>
       We first analyze the unsupervised structure of VideoMAE embeddings using
       principal component analysis. For each scene, we take its CLS embedding,
       compute a 2D PCA projection, and color the point by Qwen2-VL’s location
@@ -809,11 +838,18 @@
       scenes." Last but not least, Most narrative scenes share similar objects,
       actors, or contexts. Their text embeddings form a dense cluster; after
       squaring, their weights become even more dominant.<br /><br />
-
-      <img src="./images/SimilarityHeatMap.jpeg" width="512px" />
-      Figure: Similarity heatmap of 20 scenes from the Star Wars movie<br /><br />
     </div>
     <div class="margin-right-block"></div>
+  </div>
+
+  <div class="content-margin-container">
+    <div class="margin-left-block"></div>
+    <div class="main-content-block">
+      <img src="./images/SimilarityHeatMap.jpeg" width="512px" />
+    </div>
+    <div class="margin-right-block">
+      Figure: Similarity heatmap of 20 scenes from the Star Wars movie
+    </div>
   </div>
 
   <div class="content-margin-container">
@@ -828,11 +864,8 @@
       pseudo-annotations. PCA projections and similarity matrices provide a
       useful view into how these representations are organized and how they
       change with supervision.<br /><br />
-      <video class="my-video" loop autoplay muted style="width: 725px">
-        <source src="./images/mtsh.mp4" type="video/mp4" />
-      </video>
     </div>
-    <div class="margin-right-block">A caption for the video could go here.</div>
+    <div class="margin-right-block"></div>
   </div>
 
   <div class="content-margin-container" id="implications_and_limitations">
