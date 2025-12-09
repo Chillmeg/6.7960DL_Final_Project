@@ -368,26 +368,25 @@
         information more directly. VideoMAE extends masked autoencoding to video
         by removing a very high portion of spacetime patches during training and
         asking the encoder to reconstruct the missing content. Let the video be
-        represented as a sequence of patch tokens x ∈ ℝ<sup>T × N × D</sup>. A
-        masking operator M selects a small visible subset, and the encoder E
-        processes only these tokens to produce a latent representation z =
-        E(M(x)). The decoder D then attempts to reconstruct the original patches
-        x̂ = D(z). This forces the encoder to learn stable spatial cues, global
-        structure, and temporal relationships rather than action specific
-        features. These properties make VideoMAE suitable for identifying
-        consistent spatial identity across scenes.<br /><br />
+        represented as a sequence of patch tokens x ∈ ℝT × N × D. A masking
+        operator M selects a small visible subset, and the encoder E processes
+        only these tokens to produce a latent representation z = E(M(x)). The
+        decoder D then attempts to reconstruct the original patches x̂ = D(z).
+        This forces the encoder to learn stable spatial cues, global structure,
+        and temporal relationships rather than action specific features. These
+        properties make VideoMAE suitable for identifying consistent spatial
+        identity across scenes.<br /><br />
 
         <h2>Vision language modeling</h2>
         Language based models have become essential in video understanding,
         since narrative cues can often clarify spatial or temporal context that
-        is not visually explicit. Qwen provides strong language representations
-        and can operate in vision language settings that support reasoning over
-        frames and subtitles. In this project, Qwen is used to convert subtitle
-        segments into dense text embeddings. A subtitle segment s is encoded as
-        t = L(s), where L is the language encoder. These embeddings provide
-        contextual signals about location, time, or narrative intent, which
-        stabilizes scene identity when visual content varies due to lighting or
-        framing.<br /><br />
+        is not visually explicit. Qwen2-VL provides strong language
+        representations and can operate in vision language settings that support
+        reasoning over frames and subtitles. In this project, Qwen2-VL is used
+        to convert video segments into dense text embeddings. These embeddings
+        provide contextual signals about location, time, or narrative intent,
+        which stabilizes scene identity when visual content varies due to
+        lighting or framing.<br /><br />
 
         <h2>Multimodal fusion for scene understanding</h2>
         Combining visual and language information has become common in tasks
@@ -401,19 +400,11 @@
         question answering and video search, it has not been widely applied to
         identifying recurring architectural spaces across scenes.<br /><br />
 
-        <h2>Spatial documentation and architectural precedents</h2>
-        This project is also informed by concerns in architectural
-        documentation. Architectural historians often work with remote sites
-        that cannot be brought into controlled settings for study, and their
-        observations depend heavily on photographs and videos. Reflections in
-        texts such as <em>Capturing History Bit by Bit</em> describe the
-        challenge of recording spaces and the limits of media in conveying
-        spatial experience. While techniques such as photogrammetry, Gaussian
-        splats, and neural radiance fields provide new forms of spatial capture,
-        videos and images remain central tools. Our work extends this discussion
-        by exploring how learned representations can identify the same space
-        across many viewpoints and times, supporting spatial analysis of
-        recorded material.<br /><br />
+        In practice, the main multimodal interaction in our experiments happens
+        through the contrastive loss described in Section 3.3, where
+        text-derived similarities act as soft weights that pull or push pairs of
+        visual embeddings. This lets the language model act as an external model
+        that shapes the geometry of the video embedding space.<br /><br />
       </div>
 
       <div class="margin-right-block" style="transform: translate(0%, -100%)">
@@ -423,32 +414,167 @@
       </div>
     </div>
 
-    <div class="content-margin-container" id="proposal">
-      <div class="margin-left-block"></div>
-      <div class="main-content-block">
-        <h1>Proposal</h1>
-        Our project proposes a multimodal method for learning the spatial
-        identity of video scenes. We aim to recognize when different clips
-        depict the same physical environment even when viewpoint, lighting, or
-        time of day vary. To achieve this, we extract visual embeddings from a
-        VideoMAE encoder and combine them with subtitle based language
-        embeddings from Qwen. This fused representation captures both spatial
-        structure and narrative cues, allowing us to cluster clips by shared
-        location and track how a space appears across an entire film. By
-        comparing the visual and textual signals associated with each space, the
-        system can highlight potential continuity issues, such as inconsistent
-        lighting or temporal mismatch. Through this multimodal approach, we seek
-        to support spatial analysis and narrative interpretation of video
-        material.
-      </div>
-      <div class="margin-right-block"></div>
-    </div>
-
     <div class="content-margin-container" id="model_architecture">
       <div class="margin-left-block"></div>
       <div class="main-content-block">
         <h1>Model Architecture</h1>
-        Explain the architecture of your model in detail.
+        Our model builds upon a VideoMAE-based visual backbone and extends it
+        with a scene-level embedding head and a text-guided contrastive learning
+        module. The architecture is designed to combine visual understanding,
+        scene segmentation, and world-model reasoning within a unified
+        framework. Thus, the proposed architecture for semantic distance
+        understanding contains three components: Video Understanding
+        Backbone(VideoMAE) + Scene Embedding Head + LLM-based Semantic Distance
+        Module (Contrastive Layer).<br /><br />
+
+        <h2>Video Understanding Backbone</h2>
+        The base of our system is the pretrained MCG-NJU/videomae-base
+        transformer encoder. We load a fine-tuned checkpoint that has already
+        been trained on the FineVideo dataset for video understanding tasks. To
+        adapt this backbone for scene-level semantic modeling, we support two
+        kinds of supervisory signals: Frame-level labels, where each frame
+        receives an individual label; and Scene-level shared labels, where all
+        frames within a timestamp interval share one scene label. These two
+        settings allow the model to shift from coarse video understanding toward
+        the more structured task of scene segmentation.<br /><br />
+
+        During fine-tuning, only the last K layers of VideoMAE’s transformer
+        encoder (K = 2–4) are unfrozen. This preserves low-level visual
+        representations while allowing high-level scene semantics to adapt to
+        the downstream objective.<br /><br />
+
+        <h2>Scene Embedding Head (MLP)</h2>
+        To produce a scene-level representation, we append a lightweight MLP
+        head to the output CLS token: MLP (“Linear”→"ReLU"→"Linear"). The MLP
+        compresses the high-dimensional VideoMAE features into a compact
+        embedding space in which scene relationships can be reasoned about. This
+        embedding space is used both for segmentation tasks and for the semantic
+        distance learning described below.<br /><br />
+
+        <h2>Semantic Distance (LLM based) Contrastive training</h2>
+        While VideoMAE provides strong visual features, it lacks world knowledge
+        needed for higher-level scene reasoning.Film editing often omits
+        intermediate transitions because humans can infer continuity from
+        common-sense reasoning, and some videos take place in fictional
+        universes where everyday expectations do not apply. This requires
+        grounding in the actual visual content rather than generic knowledge. To
+        address both limitations, we introduce a language-model-powered semantic
+        distance module that uses text as an external world model.<br /><br />
+
+        For each scene, we extract metadata descriptions (scene description,
+        props, context) and encode them using a large language model to obtain a
+        normalized embedding <i>t</i><sub>i</sub> for scene <i>i</i>. Semantic
+        relatedness between two scenes <i>i</i> and <i>j</i> is measured as
+        cosine similarity<br /><br />
+
+        <center>
+          <i>s</i><sub>ij</sub> = ( <i>t</i><sub>i</sub> · <i>t</i
+          ><sub>j</sub> ) / ( &#8741;<i>t</i><sub>i</sub>&#8741; &#8741;<i>t</i
+          ><sub>j</sub>&#8741; )
+        </center>
+        <br />
+
+        These embeddings provide semantic relationships that reflect narrative
+        continuity, spatial logic, and object-level reasoning.<br /><br />
+
+        We construct soft supervision weights from <i>s</i><sub>ij</sub>, where
+        <i>w</i><sup>pos</sup><sub>ij</sub> controls how strongly we pull a pair
+        together and <i>w</i><sup>neg</sup><sub>ij</sub> controls how strongly
+        we push it apart. We experiment with two implementations for
+        <i>f</i> and <i>g</i>:<br /><br />
+
+        Linear mapping:<br /><br />
+        <center>
+          <i>w</i><sup>pos</sup><sub>ij</sub> = max( <i>s</i><sub>ij</sub>, 0
+          ),&nbsp;&nbsp; <i>w</i><sup>neg</sup><sub>ij</sub> = max( &#8722;<i
+            >s</i
+          ><sub>ij</sub>, 0 )
+        </center>
+        <br />
+
+        Squared mapping:<br /><br />
+        <center>
+          <i>w</i><sup>pos</sup><sub>ij</sub> = ( max( <i>s</i><sub>ij</sub>, 0
+          ) )<sup>2</sup>,&nbsp;&nbsp; <i>w</i><sup>neg</sup><sub>ij</sub> = (
+          max( &#8722;<i>s</i><sub>ij</sub>, 0 ) )<sup>2</sup>
+        </center>
+        <br />
+
+        In both cases, high text similarity leads to a strong pull, low
+        similarity leads to a strong push, and mid-range similarities receive
+        relatively small weights. Squaring enhances this effect by emphasizing
+        very similar or very dissimilar pairs.<br /><br />
+
+        To achieve this, first, given the video embeddings <i>v</i
+        ><sub>i</sub> from the MLP head, we normalize them:<br /><br />
+
+        <center>
+          &#770;<i>v</i><sub>i</sub> = <i>v</i><sub>i</sub> / &#8741;<i>v</i
+          ><sub>i</sub>&#8741;
+        </center>
+        <br />
+
+        and compute video-space similarity:<br /><br />
+
+        <center>
+          <i>c</i><sub>ij</sub> = &#770;<i>v</i><sub>i</sub> · &#770;<i>v</i
+          ><sub>j</sub>
+        </center>
+        <br />
+
+        Loss of Positive term (pulling):<br /><br />
+
+        <center>
+          <i>L</i><sub>pos</sub> = &#8721;<sub>i,j</sub> <i>w</i><sup>pos</sup
+          ><sub>ij</sub> ( 1 &#8722; <i>c</i><sub>ij</sub> )
+        </center>
+        <br />
+
+        Loss of Negative term (pushing):<br /><br />
+
+        <center>
+          <i>L</i><sub>neg</sub> = &#8721;<sub>i,j</sub> <i>w</i><sup>neg</sup
+          ><sub>ij</sub> <i>c</i><sub>ij</sub>
+        </center>
+        <br />
+
+        And then we have the final objective:<br /><br />
+
+        <center>
+          <i>L</i> = <i>L</i><sub>pos</sub> + <i>L</i><sub>neg</sub>.
+        </center>
+        <br /><br />
+
+        This module forces the video embedding space to align with the semantic
+        topology implied by the LLM, while still remaining grounded in actual
+        visual evidence. In this model architecture, both video and language
+        have complementary roles. A key motivation for this architecture is that
+        video-based and language-based reasoning possess complementary
+        strengths:<br /><br />
+        VideoMAE compensates for LLM limitations: 1. Fictional or stylized
+        worlds violate real-world logic; 2. Visual cues reveal spatial layout,
+        lighting, actor identity, etc.<br /><br />
+        LLM compensates for VideoMAE limitations:1. Editing creates
+        discontinuities humans resolve through world knowledge; 2. Similar
+        visual scenes may have very different narrative functions.<br /><br />
+        By coupling the two with contrastive learning, the model learns an
+        embedding space that reflects both visual relations and
+        narrative/world-level semantic similarity. Thus, the final
+        representation is capable of supporting fine-grained scene segmentation
+        and semantic distance reasoning within longer video sequences.<br /><br />
+
+        Figure: Scene distance of original VideoMAE model before training (The
+        blue line shows the interpolated semantic distance, and the orange line
+        shows visual distance. The red horizontal line is the semantic
+        threshold. For LLM, semantic distance fluctuates strongly and often
+        crosses the threshold, while for the original VideoMAE model, visual
+        distance stays near zero with only small bumps.)<br /><br />
+
+        Figure: Semantic similarity matrix (Almost all visual distances are
+        extremely small, clustered below about 0.02. This indicates that
+        VideoMAE sees the majority of clips as visually very similar. The
+        spatial layout and low level appearance of the footage remain stable
+        across most of the timeline.)
       </div>
       <div class="margin-right-block"></div>
     </div>
@@ -467,8 +593,75 @@
       <div class="margin-left-block"></div>
       <div class="main-content-block">
         <h1>Results</h1>
-        Present the results of your project, including any relevant metrics or
-        visualizations.
+        <strong>Dataset</strong>: We use the FineVideo dataset from HuggingFace,
+        a large-scale collection of short video clips paired with detailed
+        metadata. Each entry contains: raw video frames (mp4), structured scene
+        annotations, object and prop descriptions, timestamps identifying scene
+        boundaries, and contextual descriptions of each clip. This dataset is
+        well-suited for training both visual scene classifiers and semantic
+        video embedding models, because every scene is accompanied by rich
+        natural-language descriptions. <br /><br />
+
+        <strong>Preprocessing and Scene Extraction:</strong>
+        FineVideo organizes videos at the segment level and already has assigned
+        labels, therefore we can treat each unique timestamp as one scene:<br /><br />
+
+        <ul>
+          <li>
+            All frames under the same timestamp (sharing one label) are treated
+            as belonging to the same semantic scene.
+          </li>
+          <li>
+            We extract relevant text fields from the metadata provided in the
+            dataset (scene.description, props.name, content_title,
+            contextualRelevance)
+          </li>
+          <li>
+            These text snippets are cleaned and concatenated into a single scene
+            description.
+          </li>
+          <li>
+            We compute text embeddings using a pretrained language model and
+            store with each scene sample.
+          </li>
+          <li>
+            These embeddings later provide the semantic similarity supervision
+            for contrastive training.
+          </li>
+        </ul>
+
+        We randomly stream and store 3000 videos, covering 29628 scene
+        segments.<br /><br />
+
+        <strong>Baseline head training:</strong> We begin with the pretrained
+        VideoMAE-Base backbone and add a lightweight fully connected head to
+        produce scene-level embeddings. In this stage the backbone is frozen,
+        and only the head is trained. We use AdamW with a learning rate of
+        10^{-4} for the head and weight decay 10^{-4}. This gives us a visual
+        baseline representation for downstream analysis and for the
+        teacher-supervised classifier.<br /><br />
+
+        <strong>Text-guided contrastive fine-tuning:</strong> After establishing
+        a visual baseline and training several models with it, we introduce
+        semantic supervision from text embeddings using our contrastive loss. At
+        this stage, we partially unfreeze the last 2–4 transformer layers (we
+        used K = 2 in early experiments, K = 4 in final experiments), the new
+        learning rates for backbone (unfrozen layers) are 5*10^-5, and 5*10^-4
+        for MLP head. During this stage, the video embeddings are trained to
+        reflect the semantic distances implied by the textual descriptions.
+        Scenes that are close in text space receive stronger “pull” weights, and
+        scenes that are far apart receive stronger “push” weights.<br /><br />
+
+        <strong>Teacher-supervised variant:</strong> To add explicit semantic
+        structure, we also experiment with a teacher-supervised classifier. For
+        each segment, we prompt Qwen2-VL with a short video clip and ask it to
+        assign a location label such as “kitchen”, “living room”, or “outside”.
+        These labels serve as targets for a linear classifier head on top of the
+        scene embeddings. We keep the VideoMAE backbone frozen and train the
+        classifier with cross-entropy loss. Comparing this teacher-supervised
+        classifier to the unsupervised PCA baseline lets us qualitatively assess
+        how much additional structure we gain from multimodal supervision by
+        inspecting the PCA projections before and after training.<br /><br />
       </div>
       <div class="margin-right-block"></div>
     </div>
@@ -477,9 +670,14 @@
   <div class="content-margin-container" id="discussion">
     <div class="margin-left-block"></div>
     <div class="main-content-block">
-      <h1>Discussion and Conclusion</h1>
+      <h1>Results and Discussion</h1>
+      <h2>PCA Analysis of scene embeddings</h2>
       Discuss the implications of your results, any limitations of your
-      approach, and summarize your findings with proposed future work.
+      approach, and summarize your findings with proposed future work.<br /><br />
+
+      <h2>Text-guided contrastive fine-tuning</h2>
+      Show qualitative results such as images or videos generated by your model.
+      <br /><br />
     </div>
     <div class="margin-right-block"></div>
   </div>
