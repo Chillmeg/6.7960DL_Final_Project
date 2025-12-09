@@ -244,12 +244,12 @@
             </td>
             <td align="left">
               <span style="font-size: 17px"
-                ><a href="your_partner's_website">Qilmeg Doudatcz</a></span
+                ><a href="your_partner's_website">Yijiang Liu</a></span
               >
             </td>
             <td align="left">
               <span style="font-size: 17px"
-                ><a href="your_partner's_website">Yijiang Liu</a></span
+                ><a href="your_partner's_website">Qilmeg Doudatcz</a></span
               >
             </td>
           </tr>
@@ -271,11 +271,10 @@
           <b style="font-size: 16px">Outline</b><br /><br />
           <a href="#intro">Introduction</a><br /><br />
           <a href="#related_work">Related Work</a><br /><br />
-          <a href="#proposal">Proposal</a><br /><br />
           <a href="#model_architecture">Model Architecture</a><br /><br />
-          <a href="#data">Data</a><br /><br />
-          <a href="#results">Results</a><br /><br />
-          <a href="#discussion">Discussion adn Conclusion</a><br /><br />
+          <a href="#data">Data and Training Setup</a><br /><br />
+          <a href="#results">Results and Discussion</a><br /><br />
+          <a href="#discussion">Discussion</a><br /><br />
           <a href="#implications_and_limitations"
             >Implications and Limitations</a
           ><br /><br />
@@ -284,47 +283,78 @@
       </div>
       <div class="main-content-block">
         <!--You can embed an image like this:-->
-        <img src="./images/your_image_here.png" width="512px" />
+        <img src="./images/Teaser.png" width="512px" />
       </div>
-      <div class="margin-right-block">Caption for the image.</div>
+      <div class="margin-right-block">Teasor image.</div>
     </div>
 
     <div class="content-margin-container" id="intro">
       <div class="margin-left-block"></div>
       <div class="main-content-block">
         <h1>Introduction</h1>
-        2000–3000 words and contain 4–6 figures/tables required. 2X work
-        expected from 3 people group.<br /><br />
-        Architects and architectural historians often work with places that
-        cannot be transported into a controlled environment for study. Visiting
-        remote sites is essential, and the records brought back become the
-        foundation of analysis. Many techniques exist for capturing spatial
-        information, from photogrammetry to recent methods such as Gaussian
-        splats and neural radiance fields, yet videos and images remain the most
-        common and accessible tools for observing how space is experienced. Film
-        makers use these media to guide the viewer’s attention and construct a
-        directed encounter with space, yet architects do not assume that
-        visitors move through environments with such fixed viewpoints. This
-        raises an important question. Can a model learn a representation of
-        video that reflects the identity of a space across many views, lighting
-        conditions, and points in time.<br /><br />
+        In films and short videos with narrative content, editing is a common
+        tool used by directors to highlight key moments and guide the viewer’s
+        attention. However, compared with the real physical world, editing
+        weakens the continuity of time and space in the “story world”. A
+        character may instantly appear in a far-away location in the next shot,
+        and long actions may be compressed or skipped entirely. Filmmakers use
+        these media to guide the viewer’s attention and construct a directed
+        encounter with space, yet architects do not assume that visitors move
+        through environments with such fixed viewpoints. This raises an
+        important question. Can a model learn a representation of video that
+        reflects the identity of a space across many views, lighting conditions,
+        and points in time?<br /><br />
+
         Our project addresses this question by learning multimodal scene
-        representations that identify when different clips belong to the same
-        physical environment. We use a VideoMAE encoder to capture visual
-        structure and fuse these embeddings with subtitle based language
-        features from Qwen. The combined representation allows us to recover
-        recurring spaces across an entire film and observe how they change
-        through time. It also provides a way to detect continuity issues in
-        narrative media, such as inconsistent lighting or temporal mismatches.
-        This work builds on ongoing discussions about spatial recording and
-        documentation in fields such as architectural history, including
-        reflections found in Capturing History Bit by Bit, and explores how
-        machine learning can support more spatially informed interpretations of
-        video.<br /><br />
+        representations that can tell when different clips refer to the same
+        physical environment. Rather than building a full continuity-checking
+        system, for the scope of this project, we focus on how video and text
+        features organize scenes in an embedding space and how this structure
+        changes under multimodal supervision.<br /><br />
+
+        We combine visual embeddings from a VideoMAE encoder with text-based
+        features from Qwen2-VL and study how these signals shape the geometry of
+        the video embedding space. We use low-dimensional projections and
+        similarity matrices to see how scenes organize by location and how they
+        recur across an entire film. This is a key step in identifying
+        continuity concerns such as lighting inconsistencies or shifts in
+        temporal order.<br /><br />
+
+        Within this goal, we explore how much spatial structure is already
+        present in a self-supervised video model and how much additional signal
+        emerges through multimodal supervision. To do this, we compare three
+        settings on the same videos:<br /><br />
+
+        <ul>
+          <li>
+            <b>Unsupervised baseline</b>: treat VideoMAE as a frozen feature
+            extractor and project segment embeddings into 2D using principal
+            component analysis (PCA). We then inspect whether the resulting
+            geometry implicitly groups scenes by semantic locations such as
+            kitchen, living room, or exterior.
+          </li>
+          <li>
+            <b>Teacher supervised variant</b>: uuse a stronger multimodal model,
+            Qwen2-VL, as a teacher to assign soft scene labels, and train a
+            lightweight classifier head on top of VideoMAE to predict these
+            labels from video alone.
+          </li>
+          <li>
+            <b>Text guided semantic distance</b>: embed scene metadata with a
+            language model to obtain text similarities between segments, and use
+            these similarities as soft weights in a contrastive loss that
+            fine-tunes the VideoMAE embeddings toward a more location-aware
+            space.
+          </li>
+        </ul>
+
+        By contrasting these methods, we examine the degree to which a
+        self-supervised video model can recover spatial scene categories without
+        human labels and how much its representation improves when guided by
+        semantic structure from an external teacher.<br /><br />
       </div>
       <div class="margin-right-block">
-        Margin note that clarifies some detail #main-content-block for intro
-        section.
+        Margin note for introduction section.
       </div>
     </div>
 
