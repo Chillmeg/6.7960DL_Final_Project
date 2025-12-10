@@ -383,8 +383,9 @@
             </msup>
           </mrow>
         </math>
-        . A masking operator M selects a small visible subset, and the encoder E
-        processes only these tokens to produce a latent representation
+        <a href="#ref_3">[3]</a>. A masking operator M selects a small visible
+        subset, and the encoder E processes only these tokens to produce a
+        latent representation
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <mrow>
             <mi>z</mi>
@@ -422,7 +423,7 @@
         to convert video segments into dense text embeddings. These embeddings
         provide contextual signals about location, time, or narrative intent,
         which stabilizes scene identity when visual content varies due to
-        lighting or framing.<br /><br />
+        lighting or framing<a href="#ref_11">[11]</a>.<br /><br />
 
         <h2>Multimodal fusion for scene understanding</h2>
         Combining visual and language information has become common in tasks
@@ -445,13 +446,18 @@
         . This fused representation captures both spatial structure and
         narrative meaning. Although multimodal fusion is well established in
         video question answering and video search, it has not been widely
-        applied to identifying recurring architectural spaces across scenes.<br /><br />
+        applied to identifying recurring architectural spaces across scenes<a
+          href="#ref_6"
+          >[6]</a
+        >.<br /><br />
 
         In practice, the main multimodal interaction in our experiments happens
         through the contrastive loss described in Section 3.3, where
         text-derived similarities act as soft weights that pull or push pairs of
         visual embeddings. This lets the language model act as an external model
-        that shapes the geometry of the video embedding space.<br /><br />
+        that shapes the geometry of the video embedding space<a href="#ref_2"
+          >[2]</a
+        ><a href="#ref_5">[5]</a>.<br /><br />
       </div>
 
       <div class="margin-right-block"></div>
@@ -881,7 +887,9 @@
         classifier with cross-entropy loss. Comparing this teacher-supervised
         classifier to the unsupervised PCA baseline lets us qualitatively assess
         how much additional structure we gain from multimodal supervision by
-        inspecting the PCA projections before and after training.<br /><br />
+        inspecting the PCA projections before and after training<a href="#ref_6"
+          >[6]</a
+        >.<br /><br />
       </div>
       <div class="margin-right-block"></div>
     </div>
@@ -1133,7 +1141,7 @@
         <a id="ref_4"></a>[4]
         <a href="https://movienet.github.io/?utm_source=chatgpt.com">
           MovieNet </a
-        >, n.d., Accessed November 23, 2025<br /><br />
+        >, Huang Qingqiu, Xiong Yu, and Rao Anyi, Accessed November 23, 2025<br /><br />
 
         <a id="ref_5"></a>[5]
         <a href="https://github.com/MCG-NJU/VideoMAE"> MCG-NJU/VideoMAE </a>,
@@ -1158,7 +1166,7 @@
         >
           Vid2Seq: A Pretrained Visual Language Model for Describing Multi-Event
           Videos </a
-        >, n.d., Accessed December 1, 2025<br /><br />
+        >, Antoine Yang, and Arsha Nagrani, Accessed December 1, 2025<br /><br />
 
         <a id="ref_9"></a>[9]
         <a href="https://doi.org/10.48550/arXiv.2303.16727">
@@ -1170,6 +1178,9 @@
           Towards Global Video Scene Segmentation with Context-Aware Transformer </a
         >, Yang, Yang, Yurui Huang, Weili Guo, Baohua Xu, and Dingyin Xia,
         2023<br /><br />
+        <a id="ref_11"></a>[11]
+        <a href="https://huggingface.co/Qwen"> Qwen on HuggingFace </a>, Alibaba
+        Cloud, 2025<br /><br />
       </div>
     </div>
     <div class="margin-right-block">
