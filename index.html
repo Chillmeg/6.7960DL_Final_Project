@@ -334,7 +334,7 @@
             kitchen, living room, or exterior.
           </li>
           <li>
-            <b>Teacher supervised variant</b>: uuse a stronger multimodal model,
+            <b>Teacher supervised variant</b>: use a stronger multimodal model,
             Qwen2-VL, as a teacher to assign soft scene labels, and train a
             lightweight classifier head on top of VideoMAE to predict these
             labels from video alone.
@@ -353,9 +353,7 @@
         human labels and how much its representation improves when guided by
         semantic structure from an external teacher.<br /><br />
       </div>
-      <div class="margin-right-block">
-        Margin note for introduction section.
-      </div>
+      <div class="margin-right-block"></div>
     </div>
 
     <div class="content-margin-container" id="related_work">
@@ -368,14 +366,52 @@
         information more directly. VideoMAE extends masked autoencoding to video
         by removing a very high portion of spacetime patches during training and
         asking the encoder to reconstruct the missing content. Let the video be
-        represented as a sequence of patch tokens x ∈ ℝT × N × D. A masking
-        operator M selects a small visible subset, and the encoder E processes
-        only these tokens to produce a latent representation z = E(M(x)). The
-        decoder D then attempts to reconstruct the original patches x̂ = D(z).
-        This forces the encoder to learn stable spatial cues, global structure,
-        and temporal relationships rather than action specific features. These
-        properties make VideoMAE suitable for identifying consistent spatial
-        identity across scenes.<br /><br />
+        represented as a sequence of patch tokens
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mrow>
+            <mi>x</mi>
+            <mo>&#x2208;</mo>
+            <msup>
+              <mi>&#x211D;</mi>
+              <mrow>
+                <mi>T</mi>
+                <mo>&#x00D7;</mo>
+                <mi>N</mi>
+                <mo>&#x00D7;</mo>
+                <mi>D</mi>
+              </mrow>
+            </msup>
+          </mrow>
+        </math>
+        . A masking operator M selects a small visible subset, and the encoder E
+        processes only these tokens to produce a latent representation
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mrow>
+            <mi>z</mi>
+            <mo>=</mo>
+            <mi>E</mi>
+            <mo>(</mo>
+            <mi>M</mi>
+            <mo>(</mo><mi>x</mi><mo>)</mo>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        . The decoder D then attempts to reconstruct the original patches
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mrow>
+            <mover>
+              <mi>x</mi>
+              <mo>^</mo>
+            </mover>
+            <mo>=</mo>
+            <mi>D</mi>
+            <mo>(</mo><mi>z</mi><mo>)</mo>
+          </mrow>
+        </math>
+        . This forces the encoder to learn stable spatial cues, global
+        structure, and temporal relationships rather than action specific
+        features. These properties make VideoMAE suitable for identifying
+        consistent spatial identity across scenes.<br /><br />
 
         <h2>Vision language modeling</h2>
         Language based models have become essential in video understanding,
@@ -394,11 +430,22 @@
         fusion allows models to integrate appearance features with narrative
         cues that do not appear in the raw frames. In this project, the
         normalized visual embedding v from VideoMAE and the subtitle embedding t
-        from Qwen are concatenated to form a joint representation f = [v, t].
-        This fused representation captures both spatial structure and narrative
-        meaning. Although multimodal fusion is well established in video
-        question answering and video search, it has not been widely applied to
-        identifying recurring architectural spaces across scenes.<br /><br />
+        from Qwen are concatenated to form a joint representation
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <mrow>
+            <mi>f</mi>
+            <mo>=</mo>
+            <mo>[</mo>
+            <mi>v</mi>
+            <mo>,</mo>
+            <mi>t</mi>
+            <mo>]</mo>
+          </mrow>
+        </math>
+        . This fused representation captures both spatial structure and
+        narrative meaning. Although multimodal fusion is well established in
+        video question answering and video search, it has not been widely
+        applied to identifying recurring architectural spaces across scenes.<br /><br />
 
         In practice, the main multimodal interaction in our experiments happens
         through the contrastive loss described in Section 3.3, where
@@ -407,28 +454,27 @@
         that shapes the geometry of the video embedding space.<br /><br />
       </div>
 
-      <div class="margin-right-block" style="transform: translate(0%, -100%)">
-        <!-- you can move the margin notes up and down with translate -->
-        Interestingly, Plato also asked if X does Y, in
-        <a href="#ref_1">[1]</a>.
-      </div>
+      <div class="margin-right-block"></div>
     </div>
 
     <div class="content-margin-container" id="model_architecture">
       <div class="margin-left-block"></div>
       <div class="main-content-block">
         <h1>Model Architecture</h1>
-        <img src="./images/ModelArchitecture.jpeg" width="512px" />
+        <img src="./images/ModelArchitecture2.png" width="800px" />
         Our model builds upon a VideoMAE-based visual backbone and extends it
         with a scene-level embedding head and a text-guided contrastive learning
         module. The architecture is designed to combine visual understanding,
         scene segmentation, and world-model reasoning within a unified
         framework. Thus, the proposed architecture for semantic distance
-        understanding contains three components: Video Understanding
-        Backbone(VideoMAE) + Scene Embedding Head + LLM-based Semantic Distance
-        Module (Contrastive Layer).<br /><br />
+        understanding contains three components:
+        <strong
+          >Understanding Backbone(VideoMAE) + Scene Embedding Head + LLM-based
+          Semantic Distance Module (Contrastive Layer).</strong
+        >
+        <br /><br />
 
-        <h2>Video Understanding Backbone</h2>
+        <h2>Video Understanding Backbone (VideoMAE)</h2>
         The base of our system is the pretrained MCG-NJU/videomae-base
         transformer encoder. We load a fine-tuned checkpoint that has already
         been trained on the FineVideo dataset for video understanding tasks. To
@@ -469,35 +515,112 @@
         cosine similarity<br /><br />
 
         <center>
-          <i>s</i><sub>ij</sub> = ( <i>t</i><sub>i</sub> · <i>t</i
-          ><sub>j</sub> ) / ( &#8741;<i>t</i><sub>i</sub>&#8741; &#8741;<i>t</i
-          ><sub>j</sub>&#8741; )
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow>
+              <msub
+                ><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub
+              >
+              <mo>=</mo>
+              <mi>cos</mi>
+              <mo>(</mo>
+              <msub><mi>t</mi><mi>i</mi></msub>
+              <mo>,</mo>
+              <msub><mi>t</mi><mi>j</mi></msub>
+              <mo>)</mo>
+            </mrow>
+          </math>
         </center>
         <br />
 
         These embeddings provide semantic relationships that reflect narrative
         continuity, spatial logic, and object-level reasoning.<br /><br />
-
-        We construct soft supervision weights from <i>s</i><sub>ij</sub>, where
-        <i>w</i><sup>pos</sup><sub>ij</sub> controls how strongly we pull a pair
-        together and <i>w</i><sup>neg</sup><sub>ij</sub> controls how strongly
-        we push it apart. We experiment with two implementations for
+        We construct soft supervision weights from <i>s</i><sub>ij</sub>,
+        <center>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow>
+              <msubsup>
+                <mi>w</mi>
+                <mrow><mi>i</mi><mi>j</mi></mrow>
+                <mi>pos</mi>
+              </msubsup>
+              <mo>=</mo>
+              <mi>f</mi>
+              <mo>(</mo>
+              <msub
+                ><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub
+              >
+              <mo>)</mo>
+              <mo>,</mo>
+              <mo>&#160;</mo>
+              <msubsup>
+                <mi>w</mi>
+                <mrow><mi>i</mi><mi>j</mi></mrow>
+                <mi>neg</mi>
+              </msubsup>
+              <mo>=</mo>
+              <mi>f</mi>
+              <mo>(</mo>
+              <msub
+                ><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub
+              >
+              <mo>)</mo>
+            </mrow>
+          </math>
+        </center>
+        <br />
+        where <i>w</i><sup>pos</sup><sub>ij</sub> controls how strongly we pull
+        a pair together and <i>w</i><sup>neg</sup><sub>ij</sub> controls how
+        strongly we push it apart. We experiment with two implementations for
         <i>f</i> and <i>g</i>:<br /><br />
 
         Linear mapping:<br /><br />
         <center>
-          <i>w</i><sup>pos</sup><sub>ij</sub> = max( <i>s</i><sub>ij</sub>, 0
-          ),&nbsp;&nbsp; <i>w</i><sup>neg</sup><sub>ij</sub> = max( &#8722;<i
-            >s</i
-          ><sub>ij</sub>, 0 )
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow>
+              <mi>f</mi><sub>lin</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+              <mo>=</mo>
+              <mi>s</mi>
+              <mo>,</mo>
+              <mo>&#160;</mo>
+              <mi>g</mi><sub>lin</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+              <mo>=</mo>
+              <mn>1</mn>
+              <mo>&#x2212;</mo>
+              <mi>s</mi>
+            </mrow>
+          </math>
         </center>
         <br />
-
         Squared mapping:<br /><br />
         <center>
-          <i>w</i><sup>pos</sup><sub>ij</sub> = ( max( <i>s</i><sub>ij</sub>, 0
-          ) )<sup>2</sup>,&nbsp;&nbsp; <i>w</i><sup>neg</sup><sub>ij</sub> = (
-          max( &#8722;<i>s</i><sub>ij</sub>, 0 ) )<sup>2</sup>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow>
+              <!-- f_sq(s) = s² -->
+              <mi>f</mi><sub>sq</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+              <mo>=</mo>
+              <msup>
+                <mi>s</mi>
+                <mo>²</mo>
+              </msup>
+
+              <mo>,</mo>
+              <mo>&#160;</mo>
+
+              <!-- g_sq(s) = (1 - s)² -->
+              <mi>g</mi><sub>sq</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+              <mo>=</mo>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mn>1</mn>
+                  <mo>&#x2212;</mo>
+                  <mi>s</mi>
+                  <mo>)</mo>
+                </mrow>
+                <mo>²</mo>
+              </msup>
+            </mrow>
+          </math>
         </center>
         <br />
 
@@ -510,41 +633,126 @@
         ><sub>i</sub> from the MLP head, we normalize them:<br /><br />
 
         <center>
-          &#770;<i>v</i><sub>i</sub> = <i>v</i><sub>i</sub> / &#8741;<i>v</i
-          ><sub>i</sub>&#8741;
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mstyle displaystyle="true">
+              <mrow>
+                <msub>
+                  <mover>
+                    <mi>v</mi>
+                    <mo>^</mo>
+                  </mover>
+                  <mi>i</mi>
+                </msub>
+                <mo>=</mo>
+                <mfrac>
+                  <msub><mi>v</mi><mi>i</mi></msub>
+                  <mrow>
+                    <mo>&#x2225;</mo>
+                    <msub><mi>v</mi><mi>i</mi></msub>
+                    <mo>&#x2225;</mo>
+                  </mrow>
+                </mfrac>
+              </mrow>
+            </mstyle>
+          </math>
         </center>
-        <br />
 
         and compute video-space similarity:<br /><br />
 
         <center>
-          <i>c</i><sub>ij</sub> = &#770;<i>v</i><sub>i</sub> · &#770;<i>v</i
-          ><sub>j</sub>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <msubsup>
+                <mi>sim</mi>
+                <mrow><mi>i</mi><mi>j</mi></mrow>
+                <mi>video</mi>
+              </msubsup>
+              <mo>=</mo>
+              <msup>
+                <msub>
+                  <mover>
+                    <mi>v</mi>
+                    <mo>^</mo>
+                  </mover>
+                  <mi>i</mi>
+                </msub>
+                <mi>T</mi>
+              </msup>
+              <mo>&#x22C5;</mo>
+              <msub>
+                <mover>
+                  <mi>v</mi>
+                  <mo>^</mo>
+                </mover>
+                <mi>j</mi>
+              </msub>
+            </mrow>
+          </math>
         </center>
-        <br />
 
         Loss of Positive term (pulling):<br /><br />
 
         <center>
-          <i>L</i><sub>pos</sub> = &#8721;<sub>i,j</sub> <i>w</i><sup>pos</sup
-          ><sub>ij</sub> ( 1 &#8722; <i>c</i><sub>ij</sub> )
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <msub><mi>L</mi><mi>pos</mi></msub>
+              <mo>=</mo>
+              <mi>E</mi><mo>[</mo>
+              <msup><mi>w</mi><mi>pos</mi></msup>
+              <mo>(</mo>
+              <mn>1</mn><mo>&#x2212;</mo>
+              <msubsup>
+                <mi>sim</mi>
+                <mrow><mi>i</mi><mi>j</mi></mrow>
+                <mi>video</mi>
+              </msubsup>
+              <mo>)</mo>
+              <mo>]</mo>
+            </mrow>
+          </math>
         </center>
-        <br />
 
         Loss of Negative term (pushing):<br /><br />
 
         <center>
-          <i>L</i><sub>neg</sub> = &#8721;<sub>i,j</sub> <i>w</i><sup>neg</sup
-          ><sub>ij</sub> <i>c</i><sub>ij</sub>
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <msub><mi>L</mi><mi>neg</mi></msub>
+              <mo>=</mo>
+              <mi>E</mi><mo>[</mo>
+              <msub><mi>w</mi><mi>neg</mi></msub>
+              <mo>&#x22C5;</mo>
+              <mi>max</mi>
+              <mo>(</mo>
+              <msubsup>
+                <mi>sim</mi>
+                <mrow><mi>i</mi><mi>j</mi></mrow>
+                <mi>video</mi>
+              </msubsup>
+              <mo>&#x2212;</mo>
+              <mi>m</mi>
+              <mo>,</mo>
+              <mn>0</mn>
+              <mo>)</mo>
+              <mo>]</mo>
+            </mrow>
+          </math>
         </center>
-        <br />
 
         And then we have the final objective:<br /><br />
 
         <center>
-          <i>L</i> = <i>L</i><sub>pos</sub> + <i>L</i><sub>neg</sub>.
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <mi>L</mi>
+              <mo>=</mo>
+              <msub><mi>L</mi><mi>pos</mi></msub>
+              <mo>+</mo>
+              <msub><mi>L</mi><mi>neg</mi></msub>
+            </mrow>
+          </math>
         </center>
-        <br /><br />
+        <br />
 
         This module forces the video embedding space to align with the semantic
         topology implied by the LLM, while still remaining grounded in actual
@@ -572,7 +780,7 @@
       <div class="main-content-block">
         <img
           src="./images/semanticAndVideoMAEVisualDistanceOverTime.png"
-          width="512px"
+          width="650px"
         />
       </div>
       <div class="margin-right-block">
@@ -588,7 +796,7 @@
     <div class="content-margin-container">
       <div class="margin-left-block"></div>
       <div class="main-content-block">
-        <img src="./images/SemanticSimilarityMatrix.png" width="512px" />
+        <img src="./images/SemanticSimilarityMatrix.png" width="650px" />
       </div>
       <div class="margin-right-block">
         Figure: Semantic similarity matrix (Almost all visual distances are
@@ -647,20 +855,23 @@
         VideoMAE-Base backbone and add a lightweight fully connected head to
         produce scene-level embeddings. In this stage the backbone is frozen,
         and only the head is trained. We use AdamW with a learning rate of
-        10^{-4} for the head and weight decay 10^{-4}. This gives us a visual
-        baseline representation for downstream analysis and for the
-        teacher-supervised classifier.<br /><br />
+        <span class="math-inline">10<sup>-4</sup></span> for the head and weight
+        decay <span class="math-inline">10<sup>-4</sup></span
+        >. This gives us a visual baseline representation for downstream
+        analysis and for the teacher-supervised classifier.<br /><br />
 
         <strong>Text-guided contrastive fine-tuning:</strong> After establishing
         a visual baseline and training several models with it, we introduce
         semantic supervision from text embeddings using our contrastive loss. At
         this stage, we partially unfreeze the last 2–4 transformer layers (we
         used K = 2 in early experiments, K = 4 in final experiments), the new
-        learning rates for backbone (unfrozen layers) are 5*10^-5, and 5*10^-4
-        for MLP head. During this stage, the video embeddings are trained to
-        reflect the semantic distances implied by the textual descriptions.
-        Scenes that are close in text space receive stronger “pull” weights, and
-        scenes that are far apart receive stronger “push” weights.<br /><br />
+        learning rates for backbone (unfrozen layers) are
+        <span class="math-inline">5 × 10<sup>-5</sup></span
+        >, and <span class="math-inline">5 × 10<sup>-4</sup></span> for MLP
+        head. During this stage, the video embeddings are trained to reflect the
+        semantic distances implied by the textual descriptions. Scenes that are
+        close in text space receive stronger “pull” weights, and scenes that are
+        far apart receive stronger “push” weights.<br /><br />
 
         <strong>Teacher-supervised variant:</strong> To add explicit semantic
         structure, we also experiment with a teacher-supervised classifier. For
@@ -688,7 +899,7 @@
   <div class="content-margin-container">
     <div class="margin-left-block"></div>
     <div class="main-content-block">
-      <img src="./images/PCA.png" width="512px" />
+      <img src="./images/PCA.png" width="650px" />
     </div>
     <div class="margin-right-block">
       Figure: PCA of scene embeddings before and after Qwen supervision on a
@@ -809,6 +1020,7 @@
           </mrow>
         </math>
       </center>
+      <br />
 
       This mapping suppresses mid-level weights and concentrates samples into
       strong positives (≈0.7–0.8) and strong negatives (≈0.1–0.2). We unfreeze
@@ -845,7 +1057,7 @@
   <div class="content-margin-container">
     <div class="margin-left-block"></div>
     <div class="main-content-block">
-      <img src="./images/SimilarityHeatMap.jpeg" width="512px" />
+      <img src="./images/SimilarityHeatMap.jpeg" width="650px" />
     </div>
     <div class="margin-right-block">
       Figure: Similarity heatmap of 20 scenes from the Star Wars movie
