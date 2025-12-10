@@ -363,10 +363,18 @@
         <h2>Video representation learning</h2>
         Recent work in video understanding has shifted from convolution based
         models toward transformer based architectures that process spacetime
-        information more directly. VideoMAE extends masked autoencoding to video
-        by removing a very high portion of spacetime patches during training and
-        asking the encoder to reconstruct the missing content. Let the video be
-        represented as a sequence of patch tokens
+        information more directly. Benchmarks such as MovieNet
+        <a href="#ref_4">[4]</a> provide long-form movie data with detailed
+        annotations. Building on these datasets, methods like Movies2Scenes
+        <a href="#ref_1">[1]</a> and Shot Contrastive Self-Supervised Learning
+        <a href="#ref_2">[2]</a> optimize boundary accuracy or task performance,
+        however, they do not focus on the geometry of the scene embedding space
+        or on modeling recurring physical locations.<br /><br />
+
+        VideoMAE extends masked autoencoding to video by removing a very high
+        portion of spacetime patches during training and asking the encoder to
+        reconstruct the missing content. Let the video be represented as a
+        sequence of patch tokens
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <mrow>
             <mi>x</mi>
@@ -383,9 +391,8 @@
             </msup>
           </mrow>
         </math>
-        <a href="#ref_3">[3]</a>. A masking operator M selects a small visible
-        subset, and the encoder E processes only these tokens to produce a
-        latent representation
+        . A masking operator M selects a small visible subset, and the encoder E
+        processes only these tokens to produce a latent representation
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <mrow>
             <mi>z</mi>
@@ -419,19 +426,28 @@
         since narrative cues can often clarify spatial or temporal context that
         is not visually explicit. Qwen2-VL provides strong language
         representations and can operate in vision language settings that support
-        reasoning over frames and subtitles. In this project, Qwen2-VL is used
-        to convert video segments into dense text embeddings. These embeddings
-        provide contextual signals about location, time, or narrative intent,
-        which stabilizes scene identity when visual content varies due to
-        lighting or framing<a href="#ref_11">[11]</a>.<br /><br />
+        reasoning over frames and subtitles.<br /><br />
+        Other video-language models, such as Vid2Seq <a href="#ref_8">[8]</a>,
+        jointly model visual tokens and text to perform dense captioning and
+        multi-event prediction. These models show that language can sharpen
+        temporal and semantic resolution in long videos.<br /><br />
+        In this project, Qwen2-VL is used differently. We use it to convert
+        video segments into dense text embeddings, and treat it as an external
+        teacher. These embeddings provide contextual signals about location,
+        time, or narrative intent, which stabilizes scene identity when visual
+        content varies due to lighting or framing.<br /><br />
 
         <h2>Multimodal fusion for scene understanding</h2>
         Combining visual and language information has become common in tasks
-        such as retrieval, grounding, and cross modal alignment. Multimodal
-        fusion allows models to integrate appearance features with narrative
-        cues that do not appear in the raw frames. In this project, the
-        normalized visual embedding v from VideoMAE and the subtitle embedding t
-        from Qwen are concatenated to form a joint representation
+        such as retrieval, grounding, and cross modal alignment. Recent
+        architectures for global scene segmentation, such as Modality-Aware Shot
+        Relating and Comparing (MASRC) <a href="#ref_6">[6]</a> and
+        context-aware transformers <a href="#ref_10">[10]</a>, use multiple
+        modalities (appearance, audio, and metadata) to improve scene detection
+        on movie benchmarks.<br /><br />
+        In this project, the normalized visual embedding v from VideoMAE and the
+        subtitle embedding t from Qwen are concatenated to form a joint
+        representation
         <math xmlns="http://www.w3.org/1998/Math/MathML">
           <mrow>
             <mi>f</mi>
@@ -446,18 +462,13 @@
         . This fused representation captures both spatial structure and
         narrative meaning. Although multimodal fusion is well established in
         video question answering and video search, it has not been widely
-        applied to identifying recurring architectural spaces across scenes<a
-          href="#ref_6"
-          >[6]</a
-        >.<br /><br />
+        applied to identifying recurring architectural spaces across scenes.<br /><br />
 
         In practice, the main multimodal interaction in our experiments happens
         through the contrastive loss described in Section 3.3, where
         text-derived similarities act as soft weights that pull or push pairs of
         visual embeddings. This lets the language model act as an external model
-        that shapes the geometry of the video embedding space<a href="#ref_2"
-          >[2]</a
-        ><a href="#ref_5">[5]</a>.<br /><br />
+        that shapes the geometry of the video embedding space.<br /><br />
       </div>
 
       <div class="margin-right-block"></div>
@@ -887,9 +898,7 @@
         classifier with cross-entropy loss. Comparing this teacher-supervised
         classifier to the unsupervised PCA baseline lets us qualitatively assess
         how much additional structure we gain from multimodal supervision by
-        inspecting the PCA projections before and after training<a href="#ref_6"
-          >[6]</a
-        >.<br /><br />
+        inspecting the PCA projections before and after training.<br /><br />
       </div>
       <div class="margin-right-block"></div>
     </div>
