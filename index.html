@@ -534,7 +534,8 @@
 
         These embeddings provide semantic relationships that reflect narrative
         continuity, spatial logic, and object-level reasoning.<br /><br />
-        We construct soft supervision weights from <i>s</i><sub>ij</sub>,
+        We construct soft supervision weights from <i>s</i><sub>ij</sub>, <br />
+        <br />
         <center>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <mrow>
@@ -575,53 +576,47 @@
 
         Linear mapping:<br /><br />
         <center>
-          <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
             <mrow>
-              <mi>f</mi><sub>lin</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
-              <mo>=</mo>
-              <mi>s</mi>
+              <msub><mi>f</mi><mi>lin</mi></msub>
+              <mo>(</mo><mi>s</mi><mo>)</mo> <mo>=</mo><mi>s</mi>
+
               <mo>,</mo>
               <mo>&#160;</mo>
-              <mi>g</mi><sub>lin</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+
+              <msub><mi>g</mi><mi>lin</mi></msub>
+              <mo>(</mo><mi>s</mi><mo>)</mo>
               <mo>=</mo>
-              <mn>1</mn>
-              <mo>&#x2212;</mo>
-              <mi>s</mi>
+              <mn>1</mn><mo>&#x2212;</mo><mi>s</mi>
             </mrow>
           </math>
         </center>
         <br />
         Squared mapping:<br /><br />
         <center>
-          <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
             <mrow>
-              <!-- f_sq(s) = s² -->
-              <mi>f</mi><sub>sq</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+              <msub><mi>f</mi><mi>sq</mi></msub>
+              <mo>(</mo><mi>s</mi><mo>)</mo>
               <mo>=</mo>
-              <msup>
-                <mi>s</mi>
-                <mo>²</mo>
-              </msup>
+              <msup><mi>s</mi><mo>²</mo></msup>
 
               <mo>,</mo>
               <mo>&#160;</mo>
 
-              <!-- g_sq(s) = (1 - s)² -->
-              <mi>g</mi><sub>sq</sub> <mo>(</mo><mi>s</mi><mo>)</mo>
+              <msub><mi>g</mi><mi>sq</mi></msub>
+              <mo>(</mo><mi>s</mi><mo>)</mo>
               <mo>=</mo>
               <msup>
                 <mrow>
-                  <mo>(</mo>
-                  <mn>1</mn>
-                  <mo>&#x2212;</mo>
-                  <mi>s</mi>
-                  <mo>)</mo>
+                  <mo>(</mo><mn>1</mn><mo>&#x2212;</mo><mi>s</mi><mo>)</mo>
                 </mrow>
                 <mo>²</mo>
               </msup>
             </mrow>
           </math>
         </center>
+
         <br />
 
         In both cases, high text similarity leads to a strong pull, low
@@ -656,6 +651,7 @@
             </mstyle>
           </math>
         </center>
+        <br />
 
         and compute video-space similarity:<br /><br />
 
@@ -689,6 +685,7 @@
             </mrow>
           </math>
         </center>
+        <br />
 
         Loss of Positive term (pulling):<br /><br />
 
@@ -711,6 +708,7 @@
             </mrow>
           </math>
         </center>
+        <br />
 
         Loss of Negative term (pushing):<br /><br />
 
@@ -738,6 +736,7 @@
             </mrow>
           </math>
         </center>
+        <br />
 
         And then we have the final objective:<br /><br />
 
